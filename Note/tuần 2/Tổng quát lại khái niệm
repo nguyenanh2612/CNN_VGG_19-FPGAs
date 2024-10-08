@@ -1,0 +1,123 @@
+I. AI Accelerator là gì
+   AI Accelerator là một phần cứng chuyên dụng, còn được gọi là chip AI, 
+   bộ xử lý học sâu (deep learning processor) hoặc đơn vị xử lý thần kinh (neural processing unit - NPU).
+   Chúng được thiết kế để tăng tốc độ xử lý các tác vụ liên quan đến trí tuệ nhân tạo (AI), học sâu (deep learning) và học máy (machine learning).
+   
+   Các bộ AI Accelerator thường gặp: 
+        . Graphics Processing Units (GPUs):
+            +  GPUs rất hiệu quả trong việc tăng tốc các tác vụ học sâu nhờ khả năng xử lý song song cao.
+             
+        . Tensor Processing Units (TPUs):
+            + TPUs được tối ưu hóa cho các tác vụ học sâu, đặc biệt là các mô hình mạng nơ-ron.
+             
+        . Field-Programmable Gate Arrays (FPGAs):
+            + FPGAs là các mạch tích hợp có thể lập trình lại sau khi sản xuất, FPGAs cung cấp sự linh hoạt cao và hiệu suất tốt cho các ứng dụng AI.
+            
+        . Application-Specific Integrated Circuits (ASICs): 
+            + ASICs là các mạch tích hợp được thiết kế riêng cho một ứng dụng cụ thể, ASICs cung cấp hiệu suất và hiệu quả năng lượng cao nhất.
+        
+        . Neural Processing Units (NPUs):
+            + NPUs là các bộ xử lý chuyên dụng cho các tác vụ mạng nơ-ron, NPUs được tích hợp trong nhiều thiết bị di động và IoT.
+
+II. VGG_19 Architecture 
+    1. Định nghĩa 
+        VGG_19 là một mạng nơ-ron tích chập (Convolutional Neural Network - CNN) được thiết kế bởi nhóm Visual Geometry Group (VGG) tại Đại học Oxford. 
+        Đây là một trong những mô hình nổi tiếng và hiệu quả trong lĩnh vực nhận dạng hình ảnh. 
+    2. Đặc điểm 
+        Mô hình này có tổng cộng 19 lớp, bao gồm 16 lớp tích chập và 3 lớp kết nối đầy đủ.
+            + Lớp đầu vào: Nhận hình ảnh RGB kích thước cố định 224x224 pixels.
+            + Các lớp tích chập: Sử dụng các bộ lọc 3x3 với stride 1 và padding 1 để duy trì độ phân giải không gian. Các lớp này được tổ chức thành năm khối:
+                . Khối 1: 2 lớp tích chập (64 bộ lọc mỗi lớp) + max pooling
+                . Khối 2: 2 lớp tích chập (128 bộ lọc mỗi lớp) + max pooling
+                . Khối 3: 4 lớp tích chập (256 bộ lọc mỗi lớp) + max pooling
+                . Khối 4: 4 lớp tích chập (512 bộ lọc mỗi lớp) + max pooling
+                . Khối 5: 4 lớp tích chập (512 bộ lọc mỗi lớp) + max pooling
+            + Giải thích: tại mỗi lớp kernel phải có độ sâu (depth bằng với độ sâu của input đưa vô) 
+                Ví dụ: đầu vô là 224x224x3 thì phải có 64 bộ lọc có kích thước 3x3x3 chạy
+                       đầu vô là 112x112x64 thì phải có 128 bộ lọc có kích thước 3x3x64 cháy
+            + Hàm kích hoạt: ReLU (Rectified Linear Unit) được áp dụng sau mỗi lớp tích chập để giới thiệu tính phi tuyến.
+            + Các lớp pooling: Max pooling với bộ lọc 2x2 và stride 2 để giảm kích thước không gian
+            + Các lớp kết nối đầy đủ: Ba lớp kết nối đầy đủ ở cuối mạng: 
+                . Hai lớp với 4096 đơn vị mỗi lớp
+                . Một lớp với 1000 đơn vị cho phân loại
+            + Lớp Softmax: Đưa ra xác suất của các lớp cuối cùng cho phân loại
+    3. So sánh VGG_19 với các cấu trúc VGG còn lại có các lớp ít hơn
+        + Độ sâu: VGG-19 là mô hình sâu nhất với 19 lớp, trong khi VGG-11 là mô hình nông nhất với 11 lớp.
+        + Số lượng lớp tích chập: VGG-19 có nhiều lớp tích chập nhất (16 lớp), tiếp theo là VGG-16 (13 lớp), VGG-13 (10 lớp), và VGG-11 (8 lớp).
+        => Số lượng lớp tích chập nhiều hơn giúp mô hình có khả năng học được các đặc trưng phức tạp và chi tiết hơn từ dữ liệu hình ảnh.
+
+        + Nhận dạng hình ảnh: Trong các bài toán nhận dạng hình ảnh, việc học được các đặc trưng phức tạp và chi tiết giúp mô hình phân loại hình ảnh chính xác hơn. 
+          Do đó, các mô hình sâu hơn thường có độ chính xác cao hơn trong việc nhận dạng và phân loại hình ảnh.
+        
+        + Tài nguyên tính toán: Các mô hình sâu hơn có nhiều lớp hơn, đồng nghĩa với việc có nhiều tham số hơn cần được học. 
+          Điều này đòi hỏi nhiều bộ nhớ và sức mạnh tính toán hơn để xử lý và huấn luyện mô hình.
+
+    4. Định nghĩa chi tiết 
+        a) Lớp đầu vào 
+            Lớp đầu vào của VGG-19 nhận hình ảnh RGB với kích thước cố định là 224x224 pixels.
+        b) Lớp tích chập 
+            Lớp tích chập (convolutional layer) là một thành phần quan trọng trong mạng nơ-ron tích chập (Convolutional Neural Network - CNN). 
+            Đây là lớp đầu tiên để trích xuất các đặc trưng từ hình ảnh đầu vào
+                + Phép toán tích chập: Lớp tích chập thực hiện phép toán tích chập giữa ma trận hình ảnh đầu vào và một bộ lọc (kernel)
+                + Bộ lọc (Kernel): Thường có kích thước nhỏ như 3x3 hoặc 5x5.
+                + Stride: Là số pixel mà bộ lọc di chuyển mỗi lần. Stride càng lớn thì kích thước của bản đồ đặc trưng càng nhỏ
+                + Padding: Để giữ nguyên kích thước của hình ảnh sau khi áp dụng bộ lọc, các giá trị 0 có thể được thêm vào biên của hình ảnh (zero-padding)
+                + Hàm kích hoạt (Activation Function): Sau khi áp dụng bộ lọc, hàm kích hoạt như ReLU (Rectified Linear Unit) được sử dụng để giới thiệu tính phi tuyến, 
+                  giúp mô hình học được các đặc trưng phức tạp hơn
+        c) Lớp pooling
+            Lớp pooling (hay còn gọi là lớp gộp) là một thành phần quan trọng trong các mạng nơ-ron tích chập (Convolutional Neural Networks - CNNs). 
+            Chức năng chính của lớp pooling là giảm kích thước không gian của bản đồ đặc trưng (feature map), từ đó giảm số lượng tham số và tính toán trong mạng, 
+            đồng thời kiểm soát hiện tượng overfitting.
+
+            Các kiểu lớp pooling: 
+                + Max pooling: Lấy giá trị lớn nhất trong mỗi vùng của bản đồ đặc trưng.
+                + Average pooling: Tính giá trị trung bình của các giá trị trong mỗi vùng của bản đồ đặc trưng.
+                + Global pooling: Tính giá trị lớn nhất (global max pooling) hoặc giá trị trung bình (global average pooling) trên toàn bộ bản đồ đặc trưng.
+
+            So sánh các lớp pooling: 
+                + Max Pooling: Tốt cho việc giữ lại các đặc trưng mạnh mẽ và giảm ảnh hưởng của nhiễu, nhưng có thể bỏ qua các đặc trưng quan trọng không phải là giá trị lớn nhất.
+                + Average Pooling: Giữ lại thông tin tổng quát hơn và ít bị ảnh hưởng bởi nhiễu, nhưng có thể làm mất đi các đặc trưng mạnh mẽ.
+                + Global Pooling: Giảm kích thước bản đồ đặc trưng xuống mức tối thiểu, giúp giảm độ phức tạp của mô hình, nhưng có thể làm mất đi thông tin không gian chi tiết.
+
+            Cách hoạt động: 
+                + Kích thước bộ lọc: Thường sử dụng bộ lọc 2x2 hoặc 3x3 với stride 2, nghĩa là bộ lọc di chuyển 2 pixel mỗi lần.
+                + Giảm kích thước: Ví dụ, nếu bạn có một bản đồ đặc trưng 4x4 và sử dụng max pooling với bộ lọc 2x2, kết quả sẽ là một bản đồ đặc trưng 2x2.
+            
+            Vì sao VGG lại sử dụng max pooling: 
+                + Giữ lại các đặc trưng mạnh mẽ: Max Pooling giúp giữ lại các đặc trưng mạnh mẽ nhất trong mỗi vùng của bản đồ đặc trưng. Điều này rất quan trọng trong việc nhận dạng các đặc trưng quan trọng từ hình ảnh, 
+                  giúp mô hình học được các đặc trưng nổi bật hơn.
+                + Giảm ảnh hưởng của nhiễu: Max Pooling có khả năng giảm thiểu ảnh hưởng của các giá trị nhiễu nhỏ, vì nó chỉ chọn giá trị lớn nhất trong mỗi vùng. Điều này giúp mô hình trở nên ổn định hơn và ít bị ảnh hưởng bởi các yếu tố không mong muốn trong dữ liệu.
+                + Hiệu quả tính toán: Max Pooling đơn giản và hiệu quả về mặt tính toán, giúp giảm kích thước của bản đồ đặc trưng mà không làm mất đi quá nhiều thông tin quan trọng. Điều này giúp giảm số lượng tham số và tính toán trong mạng, 
+                  làm cho mô hình trở nên nhẹ hơn và nhanh hơn.
+                + Thử nghiệm và kết quả thực nghiệm: Trong quá trình phát triển VGG, các nhà nghiên cứu đã thử nghiệm nhiều cấu hình khác nhau và nhận thấy rằng Max Pooling mang lại kết quả tốt hơn trong việc nhận dạng hình ảnh so với Average Pooling.
+                  Global Pooling thường được sử dụng ở các lớp cuối cùng của mạng, nhưng không phù hợp cho các lớp giữa vì nó làm mất đi thông tin không gian chi tiết
+        d) Lớp kết nối đầy đủ (fully connected): 
+            Lớp kết nối đầy đủ (Fully Connected Layer) là một thành phần quan trọng trong các mạng nơ-ron, đặc biệt là trong các mạng nơ-ron tích chập (CNNs). Đây là lớp cuối cùng trong mạng, 
+            nơi mà tất cả các neuron trong lớp này được kết nối với tất cả các neuron trong lớp trước đó
+            
+            Cấu trúc và hoạt động: 
+                + Kết nối toàn diện: Mỗi neuron trong lớp kết nối đầy đủ nhận đầu vào từ tất cả các neuron của lớp trước đó. Điều này tạo ra một mạng lưới kết nối dày đặc, cho phép mô hình học được các mối quan hệ phức tạp giữa các đặc trưng.
+                + Trọng số và Bias: Mỗi kết nối giữa các neuron có một trọng số (weight) và mỗi neuron có một giá trị bias. Đầu vào của mỗi neuron là tổng trọng số của các đầu vào từ lớp trước cộng với bias.
+                + Hàm kích hoạt: Sau khi tính toán đầu vào, một hàm kích hoạt như ReLU, Sigmoid, hoặc Tanh được áp dụng để giới thiệu tính phi tuyến, giúp mô hình học được các mẫu phức tạp hơn.
+            
+            Vai trò: 
+                + Phân loại: Lớp kết nối đầy đủ thường được sử dụng để phân loại các đặc trưng đã được trích xuất bởi các lớp tích chập và pooling trước đó. Nó chuyển đổi các đặc trưng này thành các xác suất của các lớp đầu ra.
+                + Học các mối quan hệ phức tạp: Do tính chất kết nối toàn diện, lớp này có khả năng học được các mối quan hệ phức tạp giữa các đặc trưng, giúp cải thiện độ chính xác của mô hình
+            
+            Vì sao VGG lại sử dụng 3 lớp fully connected: 
+                + Lớp fully connected đầu tiên: Với 4096 đơn vị, lớp này giúp học các đặc trưng phức tạp từ các bản đồ đặc trưng đã được trích xuất bởi các lớp tích chập và pooling trước đó.
+                + Lớp fully connected thứ hai: Cũng với 4096 đơn vị, lớp này tiếp tục học các mối quan hệ phức tạp giữa các đặc trưng, giúp mô hình có khả năng phân loại tốt hơn.
+                + Lớp fully connected cuối cùng: Với 1000 đơn vị, lớp này chuyển đổi các đặc trưng đã học thành các xác suất của các lớp đầu ra, thường là 1000 lớp trong các bài toán phân loại hình ảnh như ImageNet.
+        e) Lớp Softmax: 
+            Lớp Softmax là một lớp kích hoạt thường được sử dụng ở đầu ra của các mạng nơ-ron nhân tạo (Artificial Neural Networks) trong các bài toán phân loại đa lớp (multi-class classification).
+
+            Hoạt động: 
+                + Chuyển đổi điểm số (logits) thành xác suất: Lớp Softmax chuyển đổi các điểm số đầu ra của mạng thành các xác suất, đảm bảo tổng xác suất của tất cả các lớp bằng 1.
+            
+            Lí do sử dụng Softmax: 
+                + Xác suất dễ hiểu: Các giá trị đầu ra của lớp Softmax là các xác suất, giúp dễ dàng hiểu và diễn giải kết quả của mô hình.
+                + Phân loại đa lớp: Softmax rất phù hợp cho các bài toán phân loại với nhiều lớp, vì nó không chỉ đưa ra lớp dự đoán mà còn định lượng được độ tin cậy của mỗi dự đoán.
+    
+    5. Công thức tính toán của cấu trúc VGG_19 
+        a) ReLU 
+        b) Floating to Fix point (Optional)

@@ -1,0 +1,9 @@
+ref: 
+	Youtube link: 
+		+ machine learning on FPGAs: https://www.youtube.com/watch?v=4MBbV2gKE98&list=PLGzeDuLmmxDpEsCAjf_sYrMC6p-Y0Ummk 
+		+ CNNs: https://www.youtube.com/watch?v=j3kyIJnoNT8&list=PLmtLOdLKF-oiDShjY2mc5a9tAHhN3_W3f
+		+ machine learning: https://www.youtube.com/watch?v=H1TRjIoHZWc&list=PLmtLOdLKF-oj54LF5g9kd1hHdpgit5eI1
+		+ Neural network: https://www.youtube.com/watch?v=aircAruvnKk&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi
+  		+ AI accelerator: https://mlsysbook.ai/contents/hw_acceleration/hw_acceleration.html
+		+ Densenet: https://amaarora.github.io/posts/2020-08-02-densenets.html
+		+ Resnet: https://www.geeksforgeeks.org/residual-networks-resnet-deep-learning/

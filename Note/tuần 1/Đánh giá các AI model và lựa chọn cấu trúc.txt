@@ -1,0 +1,177 @@
+| Tiêu chí             | CNN (Mạng Nơron Tích Chập)                | RNN (Mạng Nơron Hồi Quy)               | ANN (Mạng Nơron Nhân Tạo)             | DNN (Mạng Nơron Sâu)                    |
+|----------------------|-------------------------------------------|----------------------------------------|---------------------------------------|-----------------------------------------|
+| Ứng dụng             | - Nhận diện hình ảnh                      | - Xử lý chuỗi dữ liệu thời gian        | - Phân loại cơ bản                    | - Các bài toán phức tạp yêu cầu độ sâu  |
+|                      | - Phân loại đối tượng                     | - Dịch máy                             | - Dự đoán                             | - Xử lý hình ảnh, âm thanh, ngôn ngữ tự |
+|                      |                                           | - Nhận dạng giọng nói                  |                                       |   nhiên                                 |
+|                      |                                           |                                        |                                       |                                         |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Mức độ sử dụng       | Rất phổ biến trong lĩnh vực xử lý hình    | Phổ biến trong xử lý chuỗi và dữ liệu  | Sử dụng rộng trong các bài toán       | Phổ biến khi yêu cầu độ sâu và          |
+|                      | ảnh                                       | thời gian                              | cơ bản                                | phức tạp cao hơn ANN                    |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Mức độ phức tạp      | Trung bình - Cao                          | Cao                                    | Thấp - Trung bình                     | Cao                                     |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Phép toán chính      | - Tích chập                               | - Lặp lại theo chuỗi                   | - Tích trọng số với trọng số nơron    | - Kết nối toàn phần                     |
+|                      | - Kích hoạt (ReLU, sigmoid)               | - Tính toán trạng thái                 | - Kích hoạt (ReLU, sigmoid)           | - Kích hoạt phức tạp                    |
+|                      | - Gộp (Pooling)                           |                                        |                                       |                                         |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Mô tả sơ lược        | CNN bao gồm các lớp tích chập và lớp gộp, | RNN dựa trên khả năng duy trì          | ANN là dạng mạng nơron cơ bản với     | DNN là phiên bản mở rộng của ANN,       |
+|                      | giúp mạng tập trung vào các tính năng     | trạng thái của dữ liệu trước đó,       | các lớp kết nối hoàn toàn giữa        | bao gồm nhiều lớp ẩn hơn,               |
+|                      | không gian của dữ liệu.                   | rất hữu ích trong xử lý chuỗi          | đầu vào và đầu ra.                    | cho phép học các đặc điểm phức tạp hơn. |
+|                      |                                           | và dữ liệu tuần tự.                    |                                       |                                         |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
++ Hướng chọn thiết kế bộ tăng tốc tính toán cho model CNN. 
+
++ Một số các cấu trúc 
+    + DensenNet
+        + Độ khó: Cao
+        + Lý do: Kiến trúc DenseNet có nhiều kết nối dày đặc giữa các lớp, yêu cầu quản lý dữ liệu phức tạp và tiêu tốn nhiều tài nguyên FPGA. 
+                 Việc tối ưu hóa cho việc truyền tải thông tin qua nhiều kết nối cũng là một thách thức lớn.
+    + ResNet
+        + Độ khó: Cao
+        + Lý do: Mặc dù các skip connection giúp giảm thiểu vấn đề gradient vanishing, việc triển khai cấu trúc sâu và quản lý các kết nối có thể phức tạp, 
+                 đặc biệt là khi làm việc với các mô hình rất sâu như ResNet152.
+    + GoogleNet
+        + Độ khó: Cao
+        + Lý do: Kiến trúc Inception có nhiều kích thước kernel khác nhau trong cùng một lớp, đòi hỏi sự tối ưu hóa phức tạp để xử lý đồng thời các phép toán khác nhau.
+    + VCG
+        + Độ khó: Trung bình-Cao
+        + Lý do: VGG có cấu trúc sâu với nhiều lớp tích chập, nhưng việc sử dụng các kernel đồng nhất giúp cho việc triển khai trên FPGA dễ dàng hơn so với DenseNet và ResNet.
+    + EfficienNet
+        + Độ khó: Trung bình
+        + Lý do: Mặc dù EfficientNet tối ưu hóa về mặt tham số, việc thực thi mô hình này trên FPGA có thể phức tạp do nhiều yếu tố cần cân nhắc như chiều sâu, chiều rộng và độ phân giải.
+    + Xception 
+        + Độ khó: Trung bình
+        + Lý do: Sử dụng depthwise separable convolutions có thể giúp tiết kiệm tài nguyên, nhưng cấu trúc phức tạp có thể gây khó khăn trong việc tối ưu hóa.
+    + MobileNet
+        + Độ khó: Trung bình-Thấp
+        + Lý do: MobileNet được thiết kế để chạy trên các thiết bị hạn chế tài nguyên, giúp cho việc triển khai trên FPGA trở nên đơn giản hơn.
+    + SqueezeNet
+        + Độ khó: Thấp
+        + Lý do: Với thiết kế nhẹ và số lượng tham số ít, SqueezeNet là một trong những mô hình dễ thực thi trên FPGA.
+
+
+
+
++ Hướng chọn thực thi cấu trúc DensenNet hoặc ResNet trên FPGA đánhg giá các mức hiệu suất, latency, mức tiêu tốn năng lượng so với các thiết kế có trêm thị trường
+
++ Lí do vì sao lại lựa chọn 1 trong 2 cấu trúc DensenNet hoặc là ResNet: 
+    + DensenNet: 
+        + Hiệu suất cao
+        + Lượng tham số sử dụng được tối ưu hóa
+        + Khả năng tổng quát cao
+        + Ứng dụng linh hoạt
+        + Giảm thiểu gradient vanishing 
+    
+    + ResNet: 
+        + Giải quyết vấn đề gradient vanishing
+        + Khả năng mở rộng
+        + Hiệu suất cao
+        + Đa dạng ứng dụng
+        + Tiện lợi cho transfer learning
+        + Hiệu quả tính toán
+        + Biến thể của ResNet
+
+    + Nhược điểm của 2 cấu trúc
+        + Tài nguyên tính toán lớn(ResNet)
+        + Độ phức tạp tính toán cao(DensenNet)
+        + Khó khăn trong việc triển khai 
+
+
+
+
+Giải thích cách hoạt động của DenseNet: 
+    + Cấu trúc DenseNet (Densely Connected Convolutional Networks) là một kiến trúc mạng nơ-ron sâu (Deep Neural Network) trong lĩnh vực Deep Learning, 
+      được giới thiệu để cải thiện hiệu quả của việc học đặc trưng và truyền thông tin giữa các tầng của mạng.
+
+    + Đặc điểm chính của DenseNet:
+        + Kết nối dày đặc (Densely Connected):
+            + Mỗi tầng trong mạng DenseNet nhận đầu vào không chỉ từ tầng trước nó mà còn từ tất cả các tầng trước đó. Nghĩa là, thay vì chỉ kết nối theo chuỗi như các mạng CNN thông thường, 
+              DenseNet cho phép mỗi tầng sử dụng tất cả các đặc trưng đã được học từ các tầng trước đó.
+            + Điều này giúp mạng tránh tình trạng mất thông tin khi truyền qua nhiều tầng và giảm thiểu vấn đề gradient vanishing (mất mát gradient), một vấn đề phổ biến trong các mạng rất sâu.
+        
+        + Bảo toàn thông tin:
+            + Việc duy trì thông tin từ các tầng trước giúp việc học trở nên hiệu quả hơn và giảm yêu cầu về số lượng tham số (parameters). 
+              Mỗi tầng không cần phải học lại các đặc trưng từ đầu mà có thể tận dụng những gì các tầng trước đã học.
+        
+        + Sử dụng ít tham số hơn:
+            + Mặc dù DenseNet sử dụng nhiều kết nối, số lượng tham số không tăng quá nhiều vì nó sử dụng lại các đặc trưng đã học từ trước. Điều này giúp giảm thiểu hiện tượng overfitting (quá khớp).
+        
+        + Cấu trúc tổng thể của DenseNet:
+            + DenseNet gồm nhiều khối gọi là Dense Block. Mỗi Dense Block có các đặc trưng sau:
+                + Dense Block: Là một nhóm các tầng (layers) được kết nối với nhau theo kiểu dày đặc. Mỗi tầng nhận đầu vào từ tất cả các tầng trước đó trong cùng một block và xuất ra kết quả cho tất cả các tầng sau nó.
+                + Transition Layer: Giữa các Dense Block có các lớp chuyển tiếp (Transition Layer), có nhiệm vụ giảm số lượng kênh (channels) và kích thước đầu ra (spatial resolution) để tránh làm mạng quá cồng kềnh.
+                + Growth Rate: Là số lượng đặc trưng mới mà mỗi tầng thêm vào, điều chỉnh số lượng kết nối giữa các tầng.
+
+Giải thích cách hoạt động của ResNet: 
+    + Để giải quyết vấn đề về gradient biến mất/bùng nổ, kiến ​​trúc này đã giới thiệu khái niệm gọi là Khối dư. 
+    Trong mạng này, chúng tôi sử dụng một kỹ thuật gọi là kết nối bỏ qua . Kết nối bỏ qua kết nối các hoạt động của một lớp với các lớp tiếp theo bằng cách bỏ qua một số lớp ở giữa.
+    Điều này tạo thành một khối dư. Các mạng lại được tạo ra bằng cách xếp chồng các khối dư này lại với nhau. 
+
+    + Đặc điểm chính của ResNet:
+        + Residual Block:
+            + Residual Block là đơn vị cơ bản của ResNet. Ý tưởng chính của Residual Block là thay vì để các tầng mạng học trực tiếp ánh xạ đầu vào thành đầu ra, ta cho các tầng này học phần sai biệt (residual) giữa đầu vào và đầu ra. Điều này có nghĩa là:
+                H(x)=F(x)+x
+                + Trong đó, 
+                    + (x) là ánh xạ cần học, 
+                    + (x) là hàm số được mạng học, và 
+                    +  là đầu vào ban đầu. 
+                Việc cộng trực tiếp đầu vào x vào đầu ra F(x) giúp giữ lại thông tin qua nhiều tầng mạng và giúp gradient không bị mất mát khi truyền ngược về các tầng trước đó.
+            + Skip Connection (Kết nối tắt):
+                Trong mỗi Residual Block, có một skip connection (kết nối tắt) cho phép đầu vào x đi thẳng tới đầu ra mà không phải qua các lớp học trung gian. Điều này giúp mạng dễ dàng hơn trong việc huấn luyện, vì nó đảm bảo rằng thông tin luôn có một đường dẫn trực tiếp, 
+                không bị mất mát hoặc thay đổi quá mức.
+                Các kết nối tắt này giúp giải quyết vấn đề gradient vanishing thường gặp trong các mạng sâu, cho phép gradient có thể truyền ngược về các lớp trước mà không bị triệt tiêu.
+            + Residual Learning:
+                + Mục tiêu của ResNet là các tầng mạng chỉ cần học phần residual (phần dư) so với đầu vào, thay vì phải học toàn bộ ánh xạ đầu vào thành đầu ra. Điều này đơn giản hóa quá trình học của mạng, bởi vì việc học phần sai biệt (residual) thường dễ dàng hơn nhiều.
+            + Nhiều tầng (Very Deep Network):
+                + ResNet có thể bao gồm hàng trăm, thậm chí hàng ngàn tầng, nhờ việc sử dụng các Residual Block và kết nối tắt. Trong khi các kiến trúc mạng nơ-ron truyền thống gặp khó khăn trong việc huấn luyện các mạng rất sâu do mất mát gradient, 
+                  ResNet đã thành công trong việc huấn luyện các mạng rất sâu mà vẫn giữ được hiệu quả cao.
+            + Các phiên bản ResNet:
+                + ResNet-18, ResNet-34, ResNet-50, ResNet-101, ResNet-152: Đây là các phiên bản phổ biến của ResNet, với số tầng khác nhau (18, 34, 50, 101, và 152 tầng). Các mạng này sử dụng cấu trúc Residual Block, và số lượng tầng càng lớn, khả năng biểu diễn của mạng càng mạnh.
+
+            Trong các phiên bản sâu hơn như ResNet-50 và ResNet-101, kiến trúc Residual Block được mở rộng thành Bottleneck Block, nhằm giảm số lượng tham số và tính toán mà vẫn giữ nguyên khả năng biểu diễn của mạng.
+
+
+Giải thích cách hoạt động của GoogLeNet:
+    + GoogLeNet (còn được gọi là Inception) là một kiến trúc mạng nơ-ron sâu được giới thiệu bởi Google trong cuộc thi ImageNet Large Scale Visual Recognition Challenge 2014. GoogLeNet nổi bật nhờ việc sử dụng các khối Inception, giúp giảm số lượng tham số trong mạng mà vẫn giữ được hiệu suất cao.
+
+    + Đặc điểm chính của GoogLeNet:
+        + Inception Module:
+            + Thành phần quan trọng nhất của GoogLeNet là Inception Module. Mục tiêu của Inception Module là tạo ra một kiến trúc giúp mạng học được nhiều đặc trưng ở các mức độ khác nhau (về kích thước và chi tiết) mà không làm tăng quá nhiều tham số.
+            + Trong mỗi Inception Module, nhiều phép tích chập (convolution) với các kích thước bộ lọc khác nhau (1x1, 3x3, 5x5) được thực hiện đồng thời, cùng với một phép pooling (như Max Pooling). Đầu ra từ các phép tích chập và pooling này sau đó được ghép lại với nhau trên chiều kênh (channel).
+                + 1x1 convolution: Giảm số lượng kênh đầu vào, giảm độ phức tạp và số lượng tham số.
+                + 3x3 và 5x5 convolution: Giúp mạng học các đặc trưng từ các vùng lớn hơn trên ảnh.
+                + Max Pooling: Giúp giảm kích thước không gian của ảnh đầu vào nhưng vẫn giữ lại thông tin quan trọng.
+                Việc thực hiện các phép tính chập với các kích thước khác nhau cho phép mạng có khả năng phát hiện các đặc trưng đa dạng (về kích thước và mức độ chi tiết) trong cùng một khối.
+            + Bottleneck Layer (1x1 Convolution):
+                + GoogLeNet sử dụng các lớp convolution 1x1 như các lớp "bottleneck" để giảm số lượng kênh trước khi thực hiện các phép tính chập 3x3 hoặc 5x5. Điều này giúp giảm đáng kể số lượng tham số và lượng tính toán cần thiết, làm cho mạng tiết kiệm hơn về tài nguyên mà vẫn duy trì hiệu quả học đặc trưng.
+            + Global Average Pooling:
+                + Thay vì sử dụng các lớp fully connected như trong các kiến trúc CNN truyền thống, GoogLeNet sử dụng Global Average Pooling ở cuối mạng. Thay vì chuyển đổi toàn bộ ảnh thành vector phẳng và áp dụng nhiều lớp fully connected, GoogLeNet lấy trung bình toàn bộ kích thước không gian của mỗi kênh đầu ra để giảm xuống một vector.
+                Điều này giúp giảm số lượng tham số trong mạng, giúp giảm nguy cơ overfitting (quá khớp) và tăng hiệu suất tính toán.
+            + Nhiều lớp đầu ra (Auxiliary Classifiers):
+                + GoogLeNet sử dụng hai auxiliary classifiers (bộ phân loại phụ trợ) ở giữa mạng, được thêm vào nhằm giúp cải thiện khả năng học. Những bộ phân loại này đóng vai trò như một dạng regularization (quy chuẩn hóa), giúp mạng không phụ thuộc quá nhiều vào các tầng cuối cùng và giúp việc lan truyền gradient dễ dàng hơn trong quá trình huấn luyện.
+
+    + Cấu trúc tổng thể của GoogLeNet:
+        + GoogLeNet được xây dựng từ nhiều Inception Module chồng lên nhau, xen kẽ với các lớp Pooling (Max Pooling, Average Pooling).
+        + Các lớp convolution 1x1 được sử dụng để giảm số lượng kênh trước khi áp dụng các phép convolution 3x3 và 5x5, giúp giảm độ phức tạp của mạng.
+        + Đầu ra cuối cùng của mạng là Global Average Pooling, thay vì các lớp fully connected, và sau đó là một lớp softmax để dự đoán các nhãn đầu ra.
+
+Giải thích cách hoạt động của VGG: 
+    + VGG (Visual Geometry Group) là một kiến trúc mạng nơ-ron tích chập (CNN) nổi tiếng trong lĩnh vực học sâu, được phát triển bởi nhóm nghiên cứu tại Đại học Oxford. Kiến trúc VGG được giới thiệu trong cuộc thi ImageNet Large Scale Visual Recognition Challenge năm 2014 và đã đạt được kết quả xuất sắc trong việc phân loại hình ảnh. 
+    + Dưới đây là phần giải thích chi tiết về cấu trúc của VGG:
+        +  Đặc điểm chính của VGG:
+            + Sâu và đơn giản: VGG có cấu trúc sâu với nhiều lớp, chủ yếu sử dụng các lớp convolution nhỏ (3x3). Việc sử dụng các lớp nhỏ thay vì các lớp lớn giúp mạng dễ dàng hơn trong việc học các đặc trưng phức tạp.
+            + Sử dụng Conv và Pooling: VGG chủ yếu sử dụng các lớp tích chập và lớp gộp (pooling) để giảm kích thước đầu vào mà vẫn giữ lại các đặc trưng quan trọng. Cấu trúc này giúp tăng cường khả năng nhận diện hình ảnh.
+
+        + Cấu trúc của VGG:
+            + Lớp đầu vào:
+                + Ảnh đầu vào có kích thước 224x224x3 (3 kênh màu RGB).
+            + Lớp Convolutional:
+                + VGG có các lớp convolution với kích thước bộ lọc 3x3. Thay vì sử dụng các bộ lọc lớn (như 5x5 hay 7x7), VGG sử dụng nhiều lớp convolution 3x3 chồng lên nhau.
+                + Mỗi lớp convolution thường có số lượng kênh đầu ra gấp đôi so với lớp trước đó, tạo ra sự tăng trưởng đáng kể về số lượng tham số.
+            + Lớp Pooling:
+                + Sau mỗi nhóm 2 lớp convolution, một lớp Max Pooling với kích thước 2x2 và stride 2 được thêm vào để giảm kích thước không gian và số lượng tham số.
+                + Lớp pooling giúp giảm thiểu độ phức tạp của mạng và giúp mạng học được các đặc trưng ở cấp độ cao hơn.
+            + Lớp Fully Connected:
+                + Sau các lớp convolution và pooling, VGG sử dụng 3 lớp fully connected để tổng hợp thông tin và tạo ra các dự đoán cuối cùng.
+                + Các lớp này nối các đặc trưng đã học được với nhau và đưa ra kết quả phân loại.

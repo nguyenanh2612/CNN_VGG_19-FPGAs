@@ -1,0 +1,101 @@
+I. KHi thiết kế bộ tăng tốc phần cứng chuyên dụng cần đòi hỏi điều chỉnh: 
+    + Hiệu suất
+    + Tiêu thụ điện 
+    + Diện tích silicon 
+    + Hiệu suất tối ưu theo khối lượng công việc
+
+II. HIệu suất 
+    Hiệu suất tính bằng công thức
+        hiệu suất = thông lượng * hiệu quả 
+        thông lượng ~= xử lý song song * tần số nhịp
+        hiệu quả = số phép toán / watt
+
+    Giải thích: 
+        + Thông lượng là tốc độ xử lý các tác vụ, thường được đo bằng số phép toán dấu chấm động trên giây (FLOPS) hoặc số khung hình trên giây (FPS). Thông lượng phụ thuộc nhiều vào khả năng xử lý song song – khả năng của phần cứng để thực hiện nhiều phép toán đồng thời – và tần số xung nhịp, tức là tốc độ mà bộ xử lý thực hiện các phép toán này. 
+          Thông lượng càng cao thì hiệu suất càng tốt, nhưng đồng thời cũng dẫn đến tăng tiêu thụ điện.
+        + Hiệu quả phần cứng là thước đo cho biết có bao nhiêu phép toán được thực hiện trên mỗi watt điện tiêu thụ, phản ánh mối quan hệ giữa công việc tính toán và mức tiêu thụ năng lượng.
+
+    Chú thích: Các bộ tăng tốc phần cứng nhằm mục đích tối đa hóa hiệu suất trong giới hạn tiêu thụ điện nhất định. Điều này đòi hỏi phải cân bằng cẩn thận giữa khả năng xử lý song song, tần số xung nhịp của chip, điện áp hoạt động, tối ưu hóa khối lượng công việc, và các kỹ thuật khác để tối đa hóa số phép toán trên mỗi watt tiêu thụ.
+
+III. Quản lý diện tích Silicon và chi phí (Có thể không chú ý vào điểm này)
+    Thiết kế bộ tăng tốc đòi hỏi phải ép tối đa hiệu suất trong giới hạn diện tích silicon. Các kỹ thuật như cắt tỉa và nén giúp thu gọn các mô hình lớn hơn vào chip mà không vượt quá không gian có sẵn.
+
+IV. Tối Ưu Hóa Theo Khối Lượng Công Việc Cụ Thể
+    Một số cân nhắc quan trọng khi tối ưu hóa phần cứng cho khối lượng công việc cụ thể bao gồm:
+        + Ràng buộc bộ nhớ so với tính toán(Memory vs Compute boundedness): Khối lượng công việc ràng buộc bộ nhớ yêu cầu băng thông bộ nhớ cao hơn, trong khi các ứng dụng ràng buộc tính toán cần thông lượng phép toán cao.
+        + Tính cục bộ của dữ (Data locality): Việc di chuyển dữ liệu nên được giảm thiểu để tăng hiệu quả. Bộ nhớ gần với bộ tính toán giúp cải thiện hiệu quả.
+        + Các phép toán cấp độ bit(Bit-level operations): Các loại dữ liệu có độ chính xác thấp như INT8/INT4 tối ưu hóa mật độ tính toán.
+        + Xử lý song song dữ liệu(Data parallelism): Nhiều đơn vị tính toán được sao chép cho phép thực hiện song song.
+        + Xếp chồng(Pipelining) : Thực hiện các phép toán chồng chéo giúp tăng thông lượng.
+
+V. Các loại AI accelerator 
+    THường được thiết kế theo ASIC flow để tăng tối đa hiệu suất cho các phép toán. 
+    
+    Một số components hay được sử dụng: 
+        + SRAM do có băng thông cao hơn DRAM bên ngoài (lưu lượng truy cập nhanh hơn nhưng kích thước nhỏ hơn DRAM)
+
+        Table 10.1: Latency comparison of operations in computing and networking.
+        Operation                                     Latency
+        ---------------------------------------------------------
+        L1 cache reference                            0.5 ns
+        Branch mispredict                             5 ns
+        L2 cache reference                            7 ns
+        Mutex lock/unlock                             25 ns
+        Main memory reference                         100 ns
+        Compress 1K bytes with Zippy                  3,000 ns (3 us)
+        Send 1 KB bytes over 1 Gbps network           10,000 ns (10 us)
+        Read 4 KB randomly from SSD                   150,000 ns (150 us)
+        Read 1 MB sequentially from memory            250,000 ns (250 us)
+        Round trip within same datacenter             500,000 ns (0.5 ms)
+        Read 1 MB sequentially from SSD               1,000,000 ns (1 ms)
+        Disk seek                                     10,000,000 ns (10 ms)
+        Read 1 MB sequentially from disk              20,000,000 ns (20 ms)
+        Send packet CA → Netherlands → CA             150,000,000 ns (150 ms)
+
+        + Không giống như các bộ xử lý đa dụng, ASIC có thể được thiết kế để hỗ trợ natively các kiểu dữ liệu tùy chỉnh như INT4 hoặc bfloat16, những kiểu dữ liệu này thường được sử dụng rộng rãi trong các mô hình máy học
+
+        + Các kiến trúc ASIC có thể tận dụng mức độ song song cao hơn được điều chỉnh cho khối lượng công việc mục tiêu so với CPU hoặc GPU đa dụng. Nhiều đơn vị tính toán được tùy chỉnh cho ứng dụng có nghĩa là nhiều phép toán được thực hiện đồng thời. 
+          Các ASIC có mức độ song song cao đạt được thông lượng lớn cho các khối lượng công việc song song về dữ liệu như suy diễn mạng nơ-ron.
+
+    Một số bất lợi khi thiết kế theo ASIC: 
+        + Thời gian thiết kế dài
+          + Một số lý do: 
+            + ML algorithms evolve rapidly
+            + Datasets grow quickly
+            + ML applications change frequently
+            + Faster design cycles with GPUs/FPGAs
+    
+    Bảng so sánh các loại accelerator: 
+
+        Accelerator       Description                                 Key Advantages                                 Key Disadvantages
+    -------------------------------------------------------------------------------------------------------------
+    ASICs            Custom ICs designed for target              - Maximizes perf/watt.                         - Fixed architecture lacks flexibility
+                     workloads like AI inference                 - Optimized for tensor ops                     - High NRE cost
+                                                                 - Low latency on-chip memory                   - Long design cycles
+
+    FPGAs            Reconfigurable fabric with                  - Flexible architecture                        - Lower perf/watt than ASICs
+                     programmable logic and routing              - Low latency memory access                    - Complex programming
+
+    GPUs             Originally for graphics,                    - High throughput                              - Not as power efficient as ASICs
+                     now used for neural network acceleration    - Parallel scalability                         - Require high memory bandwidth
+                                                                 - Software ecosystem with CUDA
+
+    CPUs             General purpose processors                  - Programmability                              - Lower performance for AI workloads
+                                                                 - Ubiquitous availability
+
+VI. Algorithm-Driven Hardware Specialization
+    Hardware can be tailored to suit the characteristics of ML algorithms better:
+    + Custom Datatypes: Support low precision INT8/4 or bfloat16 in hardware for higher arithmetic density.
+    + On-Chip Memory: Increase SRAM bandwidth and lower access latency to match model memory access patterns.
+    + Domain-Specific Ops: Add hardware units for key ML functions like FFTs or matrix multiplication to reduce latency and energy.
+    + Model Profiling: Use model simulation and profiling to identify computational hotspots and optimize hardware.
+
+VII. Công cụ đánh giá hiệu suất (bendmarking)
+    Một số công cụ như MLPerf, Fathom, và AI Benchmark. 
+    Các chỉ số phổ biến được đánh giá: 
+        + Thông lượng (Throughput): Thường được đo bằng số lượng thao tác mỗi giây, chỉ ra khối lượng tính toán mà một bộ tăng tốc có thể xử lý.
+        + Độ trễ (Latency): Thời gian trễ từ khi nhập đến khi xuất trong hệ thống, điều quan trọng đối với các tác vụ xử lý thời gian thực.
+        + Hiệu suất năng lượng (Energy Efficiency): Được tính bằng số lượng thao tác trên mỗi watt, đại diện cho sự cân bằng giữa hiệu suất và tiêu thụ năng lượng.
+        + Hiệu suất chi phí (Cost Efficiency): Đánh giá chi phí vận hành so với hiệu suất, một chỉ số quan trọng cho các triển khai có hạn chế về ngân sách.
+        + Độ chính xác (Accuracy): Trong các tác vụ suy luận, độ chính xác của các phép tính là rất quan trọng và đôi khi được cân nhắc với tốc độ.
+        + Khả năng mở rộng (Scalability): Khả năng của hệ thống duy trì được sự gia tăng hiệu suất khi khối lượng tính toán tăng lên.
